@@ -1,0 +1,26 @@
+<style>
+canvas{
+    border: solid 1px black;
+    position: absolute;
+}
+</style>
+
+<canvas id='hills'></canvas>
+<canvas id='player'></canvas>
+Speed: <span id='speed'></span>
+<script type="text/javascript" src="hills.js"></script>
+<script type="text/javascript" src="player.js"></script>
+
+<script>
+window.FPS = 30;
+window.WIDTH = 640;
+window.HEIGHT = 480;
+window.speedX = 5; // The speed at which the hills move back; towards the left
+window.playerX = window.WIDTH / 5;
+
+window.initHills();
+window.initPlayer();
+window.manageHills();
+window.drawPlayer();
+
+</script>
