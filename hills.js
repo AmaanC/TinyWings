@@ -70,21 +70,9 @@ window.initHills = function (){
         }
         ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
-        hillAtPlayerX = (window.listOfHills[0].x[window.listOfHills[0].x.length - 1] > window.playerX) ? 0 : 1;
-        var currentPosIndex = closestMatch(window.listOfHills[hillAtPlayerX].x, window.playerX);
-        window.yAtPlayerX = window.listOfHills[hillAtPlayerX].y[currentPosIndex];
-        // console.log(currentPosIndex + 1 > listOfHills[hillAtPlayerX].y.length);
-
-        if(window.listOfHills[hillAtPlayerX].x[currentPosIndex + 1]){
-            window.angleAtPlayerX = Math.atan2(
-                window.listOfHills[hillAtPlayerX].y[currentPosIndex + 1]
-                - window.listOfHills[hillAtPlayerX].y[currentPosIndex],
-
-                window.listOfHills[hillAtPlayerX].x[currentPosIndex + 1]
-                - window.listOfHills[hillAtPlayerX].x[currentPosIndex]
-            );
-        }
-        // window.angleAtPlayerX *= window.angleAtPlayerX < 0 ? -1 : 1;
+        window.hillAtPlayerX = (window.listOfHills[0].x[window.listOfHills[0].x.length - 1] > window.playerX) ? 0 : 1;
+        window.currentPosIndex = closestMatch(window.listOfHills[window.hillAtPlayerX].x, window.playerX);
+        window.yAtPlayerX = window.listOfHills[window.hillAtPlayerX].y[currentPosIndex];
 
         window.listOfHills.forEach(function (obj, index){
             if(obj.x[obj.x.length - 1] <= 0){
