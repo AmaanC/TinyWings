@@ -36,7 +36,6 @@ window.initHills = function (){
             var hillX = (i * PIXEL_STEP),
                 hillY = startY+randomHeight*Math.cos(2*Math.PI/hillSlices*i);
             tempCtx.lineTo(hillX, hillY);
-            // tempCtx.moveTo(hillX, hillY);
             retObj.x.push(hillX + startX);
             retObj.y.push(hillY);
         }
@@ -48,7 +47,6 @@ window.initHills = function (){
 
     window.listOfHills = [];
     window.yAtPlayerX = 0; // The y position of the hill slope at the player's x position
-    var hillAtPlayerX;
 
     window.manageHills = function (){
         if(window.listOfHills.length === 0){
@@ -57,7 +55,7 @@ window.initHills = function (){
                 randomHeight;
 
             for(var i = 0; i < MAX_HILLS + 1; i++){
-                randomHeight = MIN_HILL_HEIGHT + Math.random() * 100;
+                randomHeight = MIN_HILL_HEIGHT + Math.random() * 50;
                 if(i !== 0){
                     startY -= randomHeight;
                 }

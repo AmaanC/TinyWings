@@ -3,7 +3,8 @@ window.initPlayer = function (){
     var player = {},
         ctx = document.getElementById('player').getContext('2d'),
         gravity = 9.8,
-        angleLimit = 70 * Math.PI / 180;
+        angleLimit = 60 * Math.PI / 180,
+        speedMultiplier = 1;
 
     player.x = window.playerX;
     player.y = 50;
@@ -34,18 +35,20 @@ window.initPlayer = function (){
 
     window.controlPlayer = function (){
         // Calculate angle of the slope at the player's position
-        if(window.listOfHills[hillAtPlayerX].x[currentPosIndex + 1]){
+        if(window.listOfHills[window.hillAtPlayerX].x[currentPosIndex + 1]){
             window.angleAtPlayerX = Math.atan2(
-                window.listOfHills[hillAtPlayerX].y[currentPosIndex + 1]
-                - window.listOfHills[hillAtPlayerX].y[currentPosIndex],
+                window.listOfHills[window.hillAtPlayerX].y[currentPosIndex + 1]
+                - window.listOfHills[window.hillAtPlayerX].y[currentPosIndex],
 
-                window.listOfHills[hillAtPlayerX].x[currentPosIndex + 1]
-                - window.listOfHills[hillAtPlayerX].x[currentPosIndex]
+                window.listOfHills[window.hillAtPlayerX].x[currentPosIndex + 1]
+                - window.listOfHills[window.hillAtPlayerX].x[currentPosIndex]
             );
         }
         else{
             // This means they went through the valley of the hill, meaning they win a boost or something
-            console.log('SWOOOSH!');
+            if(player.y >= window.yAtPlayerX){
+                console.log('SWOOOSH!');
+            }
         }
 
         // --------------------------------------------------------------
@@ -53,16 +56,19 @@ window.initPlayer = function (){
         if(player.y >= window.yAtPlayerX){
             player.y = window.yAtPlayerX;
             if(player.angle > window.angleAtPlayerX){
+                if(Math.abs(player.angle - window.angleAtPlayerX) > 30 * Math.PI / 180){
+                    console.log('BOOM!');
+                }
                 player.angle = window.angleAtPlayerX;
             }
         }
         else{
             if(player.heavier){
-                player.angle += Math.PI / 90;
-                player.weight = 1.5;
+                player.angle += Math.PI / 45;
+                player.weight = 2;
             }
             else{
-                player.angle += Math.PI / 180;
+                player.angle += Math.PI / 270;
                 player.weight = 1;
             }
         }
