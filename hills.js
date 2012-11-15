@@ -55,7 +55,7 @@ window.initHills = function (){
                 randomHeight;
 
             for(var i = 0; i < MAX_HILLS + 1; i++){
-                randomHeight = MIN_HILL_HEIGHT + Math.random() * 50;
+                randomHeight = MIN_HILL_HEIGHT + Math.random() * 30;
                 if(i !== 0){
                     startY -= randomHeight;
                 }

@@ -48,6 +48,7 @@ window.initPlayer = function (){
             // This means they went through the valley of the hill, meaning they win a boost or something
             if(player.y >= window.yAtPlayerX){
                 console.log('SWOOOSH!');
+                speedMultiplier = 1.5;
             }
         }
 
@@ -56,13 +57,17 @@ window.initPlayer = function (){
         if(player.y >= window.yAtPlayerX){
             player.y = window.yAtPlayerX;
             if(player.angle > window.angleAtPlayerX){
-                if(Math.abs(player.angle - window.angleAtPlayerX) > 30 * Math.PI / 180){
+                if(Math.abs(player.angle - window.angleAtPlayerX) > 45 * Math.PI / 180){
                     console.log('BOOM!');
+                    speedMultiplier = 0.5;
                 }
                 player.angle = window.angleAtPlayerX;
             }
         }
         else{
+            if(speedMultiplier === 0.5){
+                speedMultiplier = 1;
+            }
             if(player.heavier){
                 player.angle += Math.PI / 45;
                 player.weight = 2;
@@ -82,8 +87,8 @@ window.initPlayer = function (){
         }
 
         // Minimum speed (weight), plus the speed depending on the angle
-        player.y += player.weight + Math.sin(player.angle) * player.speed;
-        window.speedX = Math.cos(player.angle) * player.speed;
+        player.y += player.weight + Math.sin(player.angle) * player.speed * speedMultiplier;
+        window.speedX = Math.cos(player.angle) * player.speed * speedMultiplier;
         document.getElementById('speed').textContent = window.speedX;
         
         
