@@ -29,11 +29,12 @@ window.initPlayer = function (){
         ctx.fill();
         ctx.restore();
         ctx.closePath();
-
         setTimeout(window.controlPlayer, 1000/window.FPS);
     };
 
     window.controlPlayer = function (){
+        document.getElementById('fps').textContent = 1000 / (Date.now() - window.start);
+        window.start = Date.now();
         // Calculate angle of the slope at the player's position
         if(window.listOfHills[window.hillAtPlayerX].x[currentPosIndex + 1]){
             window.angleAtPlayerX = Math.atan2(
@@ -60,8 +61,11 @@ window.initPlayer = function (){
                 if(Math.abs(player.angle - window.angleAtPlayerX) > 45 * Math.PI / 180){
                     console.log('BOOM!');
                     speedMultiplier = 0.5;
+                    player.angle = window.angleAtPlayerX - (player.angle - window.angleAtPlayerX) / 4;
                 }
-                player.angle = window.angleAtPlayerX;
+                else{
+                    player.angle = window.angleAtPlayerX
+                }
             }
         }
         else{
