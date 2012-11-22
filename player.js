@@ -29,12 +29,12 @@ window.initPlayer = function (){
         ctx.fill();
         ctx.restore();
         ctx.closePath();
-        setTimeout(window.controlPlayer, 1000/window.FPS);
+        // setTimeout(function (){
+        // setTimeout(window.controlPlayer, 1000 / window.FPS);
+        // }, 1000/window.FPS);
     };
 
     window.controlPlayer = function (){
-        document.getElementById('fps').textContent = 1000 / (Date.now() - window.start);
-        window.start = Date.now();
         // Calculate angle of the slope at the player's position
         if(window.listOfHills[window.hillAtPlayerX].x[currentPosIndex + 1]){
             window.angleAtPlayerX = Math.atan2(
@@ -57,7 +57,7 @@ window.initPlayer = function (){
         // If the hill and player touch, move the player back, and fix the angle
         if(player.y >= window.yAtPlayerX){
             player.y = window.yAtPlayerX;
-            if(player.angle > window.angleAtPlayerX){
+            if(player.angle >= window.angleAtPlayerX){
                 if(Math.abs(player.angle - window.angleAtPlayerX) > 45 * Math.PI / 180){
                     console.log('BOOM!');
                     speedMultiplier = 0.5;
@@ -77,7 +77,7 @@ window.initPlayer = function (){
                 player.weight = 2;
             }
             else{
-                player.angle += Math.PI / 270;
+                player.angle += Math.PI / 360;
                 player.weight = 1;
             }
         }
@@ -96,7 +96,7 @@ window.initPlayer = function (){
         document.getElementById('speed').textContent = window.speedX;
         
         
-        window.drawPlayer();
+        // window.drawPlayer();
     };
 
     document.body.addEventListener('mousedown', function (){

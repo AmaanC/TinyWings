@@ -23,13 +23,14 @@ window.initHills = function (){
         var hillSlices = hillWidth / PIXEL_STEP,
             tempCtx = document.createElement('canvas').getContext('2d'),
             retObj = {
-                src: '',
+                canvasElem: '',
                 x: [],
                 y: []
             };
 
         tempCtx.canvas.width = hillWidth;
         tempCtx.canvas.height = HEIGHT;
+        tempCtx.save();
         tempCtx.beginPath();
         tempCtx.moveTo(0, startY+randomHeight*Math.cos(0));
         for(var i = 0; i <= hillSlices; i++){
@@ -40,8 +41,12 @@ window.initHills = function (){
             retObj.y.push(hillY);
         }
         tempCtx.stroke();
+        tempCtx.clip();
+        // tempCtx.fillRect(0,0, 3000, 300);
+        // Create the hill's background texture here
         tempCtx.closePath();
-        retObj.src = tempCtx.canvas.toDataURL();
+        tempCtx.restore();
+        retObj.canvasElem = tempCtx.canvas;
         return retObj;
     };
 
@@ -61,12 +66,9 @@ window.initHills = function (){
                 }
                 startX = i * hillWidth;
                 window.listOfHills.push( makeHill(startX, startY, randomHeight) );
-                window.listOfHills[i].img = new Image();
-                window.listOfHills[i].img.src = window.listOfHills[i].src;
                 startY += randomHeight;
             }
         }
-        ctx.clearRect(0, 0, WIDTH, HEIGHT);
 
         window.hillAtPlayerX = (window.listOfHills[0].x[window.listOfHills[0].x.length - 1] > window.playerX) ? 0 : 1;
         window.currentPosIndex = closestMatch(window.listOfHills[window.hillAtPlayerX].x, window.playerX);
@@ -81,15 +83,13 @@ window.initHills = function (){
                     randomHeight = MIN_HILL_HEIGHT + Math.random() * 100;
                 startY -= randomHeight;
                 window.listOfHills.push( makeHill(startX, startY, randomHeight) );
-                window.listOfHills[listOfHills.length - 1].img = new Image();
-                window.listOfHills[listOfHills.length - 1].img.src = window.listOfHills[listOfHills.length - 1].src;
                 return;
             }
-            else{
+            else {
                 for(var i = 0, len = obj.x.length; i < len; i++){
                     obj.x[i] -= window.speedX;
                 }
-                drawHill(obj.img, obj.x[0]);
+                // window.drawHill(obj.canvasElem, obj.x[0]);
             }
         });
 
@@ -97,9 +97,13 @@ window.initHills = function (){
         while( (deletedIndex = window.listOfHills.indexOf(undefined)) >= 0 ){
             window.listOfHills.splice(deletedIndex, 1);
         }
-        setTimeout(manageHills, 1000/window.FPS);
+        // setTimeout(manageHills, 1000 / window.FPS);
     };
-    window.drawHill = function(img, startX){
-        ctx.drawImage(img, startX, 0);
+
+    window.drawHills = function(canvasElem, startX){
+        ctx.clearRect(0, 0, WIDTH, HEIGHT);
+        window.listOfHills.forEach(function (obj){
+            ctx.drawImage(obj.canvasElem, obj.x[0], 0);
+        });
     };
 };

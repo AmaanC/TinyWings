@@ -9,14 +9,17 @@ canvas{
 <canvas id='player'></canvas>
 Speed: <span id='speed'></span>
 <br>
-<span id='fps'></span> fps
+Logic fps: <span id='lfps'></span>
+<br>
+Drawing fps: <span id='dfps'></span>
+<script type="text/javascript" src="shims.js"></script>
 <script type="text/javascript" src="hills.js"></script>
 <script type="text/javascript" src="player.js"></script>
 
 <script>
 // Note: Replace all `window`s with whatever you name the game. DO NOT FORGET GAHAGAAHAGAHAGAGAHHAGAGAHA
 
-window.FPS = 30;
+window.FPS = 60;
 window.WIDTH = 640;
 window.HEIGHT = 480;
 window.speedX = 5; // The speed at which the hills move back; towards the left
@@ -26,7 +29,21 @@ window.playerX = window.WIDTH / 10; // Player's position on the x-axis
 
 window.initHills();
 window.initPlayer();
-window.manageHills();
-window.drawPlayer();
+window.logic = function (){
+    document.getElementById('lfps').textContent = 1000 / (Date.now() - window.lstart);
+    window.lstart = Date.now();
+    window.manageHills();
+    window.controlPlayer();
+    setTimeout(window.logic, 1000 / window.FPS);
+};
+window.draw = function (){
+    document.getElementById('dfps').textContent = 1000 / (Date.now() - window.dstart);
+    window.dstart = Date.now();
+    window.drawHills();
+    window.drawPlayer();
+    setTimeout(window.draw, 1000 / window.FPS);
+};
 
+window.logic();
+window.draw();
 </script>
