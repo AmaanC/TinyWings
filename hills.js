@@ -4,12 +4,12 @@ window.initHills = function (){
         MAX_HILLS = 2,
         MIN_HILL_HEIGHT = 20,
         PIXEL_STEP = 5,
-        hillWidth = WIDTH / MAX_HILLS;
+        hillWidth = window.WIDTH / MAX_HILLS;
 
     var lastTime, framesElapsed; // Needed for the delta logic code
 
-    ctx.canvas.width = WIDTH;
-    ctx.canvas.height = HEIGHT;
+    ctx.canvas.width = window.WIDTH;
+    ctx.canvas.height = window.HEIGHT;
 
     var closestMatch = function (array, num){
         var i = 0;
@@ -31,7 +31,7 @@ window.initHills = function (){
             };
 
         tempCtx.canvas.width = hillWidth;
-        tempCtx.canvas.height = HEIGHT;
+        tempCtx.canvas.height = window.HEIGHT;
         tempCtx.save();
         tempCtx.beginPath();
         tempCtx.moveTo(0, startY+randomHeight*Math.cos(0));
@@ -70,7 +70,7 @@ window.initHills = function (){
 
         lastTime = Date.now();
         if(window.listOfHills.length === 0){
-            var startY = 3 * HEIGHT/4,
+            var startY = 3 * window.HEIGHT/4,
                 startX,
                 randomHeight;
 
@@ -80,14 +80,14 @@ window.initHills = function (){
                     startY -= randomHeight;
                 }
                 startX = i * hillWidth;
-                window.listOfHills.push( makeHill(startX, startY, randomHeight) );
+                window.listOfHills.push( window.makeHill(startX, startY, randomHeight) );
                 startY += randomHeight;
             }
         }
 
         window.hillAtPlayerX = (window.listOfHills[0].x[window.listOfHills[0].x.length - 1] > window.playerX) ? 0 : 1;
         window.currentPosIndex = closestMatch(window.listOfHills[window.hillAtPlayerX].x, window.playerX);
-        window.yAtPlayerX = window.listOfHills[window.hillAtPlayerX].y[currentPosIndex];
+        window.yAtPlayerX = window.listOfHills[window.hillAtPlayerX].y[window.currentPosIndex];
 
         window.listOfHills.forEach(function (obj, index){
             if(obj.x[obj.x.length - 1] <= 0){
@@ -97,7 +97,7 @@ window.initHills = function (){
                     startY = lastHill.y[lastHill.y.length - 1],
                     randomHeight = MIN_HILL_HEIGHT + Math.random() * 100;
                 startY -= randomHeight;
-                window.listOfHills.push( makeHill(startX, startY, randomHeight) );
+                window.listOfHills.push( window.makeHill(startX, startY, randomHeight) );
                 return;
             }
             else {
@@ -113,8 +113,8 @@ window.initHills = function (){
         }
     };
 
-    window.drawHills = function(canvasElem, startX){
-        ctx.clearRect(0, 0, WIDTH, HEIGHT);
+    window.drawHills = function(){
+        ctx.clearRect(0, 0, window.WIDTH, window.HEIGHT);
         window.listOfHills.forEach(function (obj){
             ctx.drawImage(obj.canvasElem, obj.x[0], 0);
         });

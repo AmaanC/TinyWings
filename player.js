@@ -2,7 +2,6 @@ window.initPlayer = function (){
     'use strict';
     var player = {},
         ctx = document.getElementById('player').getContext('2d'),
-        gravity = 9.8,
         angleLimit = 60 * Math.PI / 180,
         speedMultiplier = 1;
     var keycode = 40; // Keycode for what brings the player down. Right now, it is the down arrow
@@ -22,7 +21,7 @@ window.initPlayer = function (){
     var diameter = player.radius * 2;
 
     window.drawPlayer = function (){
-        ctx.clearRect(player.x - player.radius*2, 0, diameter*3, HEIGHT);
+        ctx.clearRect(player.x - player.radius*2, 0, diameter*3, window.HEIGHT);
         ctx.beginPath();
         ctx.save();
         ctx.translate(player.x, player.y);
@@ -49,13 +48,13 @@ window.initPlayer = function (){
 
         lastTime = Date.now();
         // Calculate angle of the slope at the player's position
-        if(window.listOfHills[window.hillAtPlayerX].x[currentPosIndex + 1]){
+        if(window.listOfHills[window.hillAtPlayerX].x[window.currentPosIndex + 1]){
             window.angleAtPlayerX = Math.atan2(
-                window.listOfHills[window.hillAtPlayerX].y[currentPosIndex + 1]
-                - window.listOfHills[window.hillAtPlayerX].y[currentPosIndex],
+                window.listOfHills[window.hillAtPlayerX].y[window.currentPosIndex + 1] -
+                window.listOfHills[window.hillAtPlayerX].y[window.currentPosIndex],
 
-                window.listOfHills[window.hillAtPlayerX].x[currentPosIndex + 1]
-                - window.listOfHills[window.hillAtPlayerX].x[currentPosIndex]
+                window.listOfHills[window.hillAtPlayerX].x[window.currentPosIndex + 1] -
+                window.listOfHills[window.hillAtPlayerX].x[window.currentPosIndex]
             );
         }
         else {
@@ -77,7 +76,7 @@ window.initPlayer = function (){
                     player.angle = window.angleAtPlayerX - (player.angle - window.angleAtPlayerX) / 4;
                 }
                 else {
-                    player.angle = window.angleAtPlayerX
+                    player.angle = window.angleAtPlayerX;
                 }
             }
         }
