@@ -6,6 +6,8 @@ window.initHills = function (){
         PIXEL_STEP = 5,
         hillWidth = WIDTH / MAX_HILLS;
 
+    var lastTime, framesElapsed; // Needed for the delta logic code
+
     ctx.canvas.width = WIDTH;
     ctx.canvas.height = HEIGHT;
 
@@ -54,6 +56,19 @@ window.initHills = function (){
     window.yAtPlayerX = 0; // The y position of the hill slope at the player's x position
 
     window.manageHills = function (){
+        if(lastTime){
+            framesElapsed = Math.round( (Date.now() - lastTime) / (1000 / window.FPS) );
+        }
+        else {
+            framesElapsed = 1;
+        }
+
+        // This might happen when the user leaves the tab or similar (on fast computers). Going that fast would be crazy
+        if(framesElapsed >= 30){
+            framesElapsed = 2;
+        }
+
+        lastTime = Date.now();
         if(window.listOfHills.length === 0){
             var startY = 3 * HEIGHT/4,
                 startX,
@@ -87,7 +102,7 @@ window.initHills = function (){
             }
             else {
                 for(var i = 0, len = obj.x.length; i < len; i++){
-                    obj.x[i] -= window.speedX;
+                    obj.x[i] -= window.speedX * framesElapsed;
                 }
             }
         });

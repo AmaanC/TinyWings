@@ -7,6 +7,8 @@ window.initPlayer = function (){
         speedMultiplier = 1;
     var keycode = 40; // Keycode for what brings the player down. Right now, it is the down arrow
 
+    var lastTime, framesElapsed;
+
     player.x = window.playerX;
     player.y = 50;
     player.speed = 5; // The speed in the direction he's facing
@@ -33,6 +35,19 @@ window.initPlayer = function (){
     };
 
     window.controlPlayer = function (){
+        if(lastTime){
+            framesElapsed = Math.round( (Date.now() - lastTime) / (1000 / window.FPS) );
+        }
+        else {
+            framesElapsed = 1;
+        }
+
+        // This might happen when the user leaves the tab or similar (on fast computers). Going that fast would be crazy
+        if(framesElapsed >= 30){
+            framesElapsed = 2;
+        }
+
+        lastTime = Date.now();
         // Calculate angle of the slope at the player's position
         if(window.listOfHills[window.hillAtPlayerX].x[currentPosIndex + 1]){
             window.angleAtPlayerX = Math.atan2(
@@ -43,7 +58,7 @@ window.initPlayer = function (){
                 - window.listOfHills[window.hillAtPlayerX].x[currentPosIndex]
             );
         }
-        else{
+        else {
             // This means they went through the valley of the hill, meaning they win a boost or something
             if(player.y >= window.yAtPlayerX){
                 console.log('SWOOOSH!');
@@ -61,12 +76,12 @@ window.initPlayer = function (){
                     speedMultiplier = 0.5;
                     player.angle = window.angleAtPlayerX - (player.angle - window.angleAtPlayerX) / 4;
                 }
-                else{
+                else {
                     player.angle = window.angleAtPlayerX
                 }
             }
         }
-        else{
+        else {
             if(speedMultiplier === 0.5){
                 speedMultiplier = 1;
             }
@@ -74,8 +89,8 @@ window.initPlayer = function (){
                 player.angle += Math.PI / 45;
                 player.weight = 2;
             }
-            else{
-                player.angle += Math.PI / 360;
+            else {
+                player.angle += Math.PI / 450;
                 player.weight = 1;
             }
         }
@@ -89,7 +104,7 @@ window.initPlayer = function (){
         }
 
         // Minimum speed (weight), plus the speed depending on the angle
-        player.y += player.weight + Math.sin(player.angle) * player.speed * speedMultiplier;
+        player.y += player.weight + Math.sin(player.angle) * player.speed * speedMultiplier * framesElapsed;
         window.speedX = Math.cos(player.angle) * player.speed * speedMultiplier;
         document.getElementById('speed').textContent = window.speedX;
     };
