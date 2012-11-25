@@ -29,9 +29,6 @@ window.initPlayer = function (){
         ctx.fill();
         ctx.restore();
         ctx.closePath();
-        // setTimeout(function (){
-        // setTimeout(window.controlPlayer, 1000 / window.FPS);
-        // }, 1000/window.FPS);
     };
 
     window.controlPlayer = function (){
@@ -94,9 +91,6 @@ window.initPlayer = function (){
         player.y += player.weight + Math.sin(player.angle) * player.speed * speedMultiplier;
         window.speedX = Math.cos(player.angle) * player.speed * speedMultiplier;
         document.getElementById('speed').textContent = window.speedX;
-        
-        
-        // window.drawPlayer();
     };
 
     document.body.addEventListener('mousedown', function (){
@@ -105,5 +99,10 @@ window.initPlayer = function (){
     document.body.addEventListener('mouseup', function (){
         player.heavier = false;
     }, false);
-
+    document.body.addEventListener('keydown', function (){
+        player.heavier = true;
+    }, false);
+    document.body.addEventListener('keyup', function (){
+        player.heavier = false;
+    }, false);
 };

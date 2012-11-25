@@ -89,7 +89,6 @@ window.initHills = function (){
                 for(var i = 0, len = obj.x.length; i < len; i++){
                     obj.x[i] -= window.speedX;
                 }
-                // window.drawHill(obj.canvasElem, obj.x[0]);
             }
         });
 
@@ -97,7 +96,6 @@ window.initHills = function (){
         while( (deletedIndex = window.listOfHills.indexOf(undefined)) >= 0 ){
             window.listOfHills.splice(deletedIndex, 1);
         }
-        // setTimeout(manageHills, 1000 / window.FPS);
     };
 
     window.drawHills = function(canvasElem, startX){
