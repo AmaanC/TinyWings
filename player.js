@@ -5,6 +5,7 @@ window.initPlayer = function (){
         gravity = 9.8,
         angleLimit = 60 * Math.PI / 180,
         speedMultiplier = 1;
+    var keycode = 40; // Keycode for what brings the player down. Right now, it is the down arrow
 
     player.x = window.playerX;
     player.y = 50;
@@ -99,10 +100,22 @@ window.initPlayer = function (){
     document.body.addEventListener('mouseup', function (){
         player.heavier = false;
     }, false);
-    document.body.addEventListener('keydown', function (){
+
+    document.body.addEventListener('touchstart', function (){
         player.heavier = true;
     }, false);
-    document.body.addEventListener('keyup', function (){
+    document.body.addEventListener('touchend', function (){
         player.heavier = false;
+    }, false);
+
+    document.body.addEventListener('keydown', function (e){
+        if(e.keyCode === keycode){
+            player.heavier = true;
+        }
+    }, false);
+    document.body.addEventListener('keyup', function (e){
+        if(e.keyCode === keycode){
+            player.heavier = false;
+        }
     }, false);
 };
