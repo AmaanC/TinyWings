@@ -41,7 +41,7 @@ window.draw = function (){
     window.dstart = Date.now();
     window.drawHills();
     window.drawPlayer();
-    requestAnimationFrame(window.draw, 1000 / window.FPS);
+    requestAnimationFrame(window.draw);
 };
 
 window.logic();
