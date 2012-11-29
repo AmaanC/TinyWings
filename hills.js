@@ -1,7 +1,8 @@
 window.initHills = function (){
     'use strict';
     var ctx = document.getElementById('hills').getContext('2d'),
-        MAX_HILLS = 2,
+        MAX_HILLS = 2, // MAX_HILLS is the number of hills that fit on the screen
+        EXTRA_HILLS = 2, // The extra hills that scroll into view
         MIN_HILL_HEIGHT = 20,
         PIXEL_STEP = 5,
         hillWidth = window.WIDTH / MAX_HILLS;
@@ -10,7 +11,6 @@ window.initHills = function (){
 
     ctx.canvas.width = window.WIDTH;
     ctx.canvas.height = window.HEIGHT;
-
     var closestMatch = function (array, num){
         var i = 0;
         array.forEach(function (elem, index){
@@ -55,6 +55,15 @@ window.initHills = function (){
     window.listOfHills = [];
     window.yAtPlayerX = 0; // The y position of the hill slope at the player's x position
 
+    var addHill = function (){
+        var lastHill = window.listOfHills[window.listOfHills.length - 1];
+        var startX = lastHill.x[lastHill.x.length - 1] - window.speedX * framesElapsed,
+            startY = lastHill.y[lastHill.y.length - 1],
+            randomHeight = MIN_HILL_HEIGHT + Math.random() * 100;
+        startY -= randomHeight;
+        window.listOfHills.push( window.makeHill(startX, startY, randomHeight) );
+    };
+
     window.manageHills = function (){
         if(lastTime){
             framesElapsed = Math.round( (Date.now() - lastTime) / (1000 / window.FPS) );
@@ -69,12 +78,13 @@ window.initHills = function (){
         }
 
         lastTime = Date.now();
+        // Draw the hills when the game starts!
         if(window.listOfHills.length === 0){
             var startY = 3 * window.HEIGHT/4,
                 startX,
                 randomHeight;
 
-            for(var i = 0; i < MAX_HILLS + 1; i++){
+            for(var i = 0; i < MAX_HILLS + EXTRA_HILLS; i++){
                 randomHeight = MIN_HILL_HEIGHT + Math.random() * 30;
                 if(i !== 0){
                     startY -= randomHeight;
@@ -85,19 +95,16 @@ window.initHills = function (){
             }
         }
 
-        window.hillAtPlayerX = (window.listOfHills[0].x[window.listOfHills[0].x.length - 1] > window.playerX) ? 0 : 1;
-        window.currentPosIndex = closestMatch(window.listOfHills[window.hillAtPlayerX].x, window.playerX);
+        // Data that needs to be shared with the player module
+        window.hillAtPlayerX = (window.listOfHills[0].x[window.listOfHills[0].x.length - 1] > window.player.x) ? 0 : 1;
+        window.currentPosIndex = closestMatch(window.listOfHills[window.hillAtPlayerX].x, window.player.x);
         window.yAtPlayerX = window.listOfHills[window.hillAtPlayerX].y[window.currentPosIndex];
 
         window.listOfHills.forEach(function (obj, index){
             if(obj.x[obj.x.length - 1] <= 0){
                 window.listOfHills[index] = undefined;
-                var lastHill = window.listOfHills[window.listOfHills.length - 1];
-                var startX = lastHill.x[lastHill.x.length - 1] - window.speedX * framesElapsed,
-                    startY = lastHill.y[lastHill.y.length - 1],
-                    randomHeight = MIN_HILL_HEIGHT + Math.random() * 100;
-                startY -= randomHeight;
-                window.listOfHills.push( window.makeHill(startX, startY, randomHeight) );
+                addHill();
+                // Remove the hill that just went, and add another one
                 return;
             }
             else {
@@ -115,8 +122,12 @@ window.initHills = function (){
 
     window.drawHills = function(){
         ctx.clearRect(0, 0, window.WIDTH, window.HEIGHT);
+        ctx.save();
+        // ctx.translate(0, 0.25 * window.HEIGHT);
+        // ctx.scale(0.75, 0.75);
         window.listOfHills.forEach(function (obj){
             ctx.drawImage(obj.canvasElem, obj.x[0], 0);
         });
+        ctx.restore();
     };
 };
